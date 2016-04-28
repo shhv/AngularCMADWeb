@@ -42,6 +42,12 @@ public class UserService {
 	@GET
 	@Produces({MediaType.APPLICATION_JSON})
 	public List<User> getUsers() {
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Session ses = HibernateUtil.currentSession();
 		try {
 			return ses.createCriteria(User.class).list();
