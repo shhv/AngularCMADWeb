@@ -1,69 +1,35 @@
-<!DOCTYPE html>
-<html long="en">
+<!DOCTYPE>
+<html ng-app="Airlines">
 <head>
-<script src="scripts/angular.js"></script>
-<style>
-table, th, td {
-	border: 1px solid black;
-}
-</style>
+<link rel="stylesheet" href="styles/bootstrap.css" />
+
+<script type="text/javascript" src="scripts/jquery-2.1.3.js"></script>
+<script type="text/javascript" src="scripts/angular.js"></script>
+<script type="text/javascript" src="scripts/app3.js"></script>
 </head>
-<body ng-app="myapp">
-	<div ng-controller="UserController">
-		<div ng-show="show"><img src="images/loading.gif"/></div>
-		<table>
-			<tr>
-				<th>Firstname</th>
-				<th>email</th>
-			</tr>
-			<tr ng-repeat="u in Users">
-				<td>{{u.name}}</td>
-				<td>{{u.emailId}}</td>
+<body>
+	<h2>Users</h2>
+	<div ng-controller="UserController as userController">
+		<div ng-show="loading"><img src="images/loading.gif"></img></div>
+		<table style="width: 400px">
+			<tr ng-repeat="user in users">
+				<td>{{user.name}}</td>
+				<td>{{user.age}}</td>
+				<td><a href='#' ng-click="editUser(user)">Edit</a></td>
 			</tr>
 		</table>
-		<br>
-	
-	
-	<form action="" ng-click="form = true">
-			<input type="button" value="Create User">
-			<br>
-			<br>
-		</form>
-		<form ng-show="form">
-			First name:<br> <input type="text" name="firstname"
-				value="" ng-model="User.name"> <br> 
-			email:<br> <input type="text"
-				name="emailId" value="" ng-model="User.emailId"> 
-				<br>
-				<br> 
-			<input type="button" value="Submit" ng-click="addUser()">
-		</form>
-</div>
-	<script>
-		angular.module("myapp", []).controller('UserController', ['$scope','$http','$log', function($scope,$http,$log) {
-					$scope.show = true;
-					$scope.form = false;
-					$log.debug("getting user");
-					var result = $http.get('http://localhost:8080/AngularDynWeb/rest/user');
-					result.success(function(data, status, headers, config) {
-						console.log(data);
-						$scope.Users = data;
-						$scope.show = false;
-					}).error(function(data, status, headers, config) {
-						alert(error);
-						$scope.show = false;
-						$scope.error = status;
-					});
-					$scope.addUser = function() {
-					console.log($scope.User);
-					var formPost = $http.post('http://localhost:8080/AngularDynWeb/rest/user', $scope.User)
-				.success(function(data) {
-						console.log(data);
-						$scope.Users.push($scope.User);
-						$scope.form = false;
-					});
-					};
-				}]);
-	</script>
+		{{error}}
+		Showing {{users.length}} users
+		<input type="button" value="Add User" ng-click="showAddForm=true"></input>
+		<div ng-show="showAddForm || showEditForm">
+			<form novalidate>
+				<input type="text" ng-model="user.name"></input>
+				<input type="number" ng-model="user.age"></input>
+				<input type="button" value="Cancel" ng-click="showAddForm=false"></input>
+				<input type="button" value="Update" ng-show="showEditForm" ng-click="updateUser(user)"></input>
+				<input type="button" value="Save" ng-show="showAddForm" ng-click="addUser(user)"></input>
+			</form>
+		</div>
+	</div>
 </body>
 </html>

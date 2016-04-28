@@ -59,6 +59,7 @@ table, th, td {
 					var formPost = $http.post('http://localhost:8080/AngularDynWeb/rest/user', $scope.User)
 				.success(function(data) {
 						console.log(data);
+						//$scope.users.push(angular.copy($scope.user));
 						$scope.Users.push($scope.User);
 						$scope.form = false;
 					});
