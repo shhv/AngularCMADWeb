@@ -9,6 +9,10 @@ table, th, td {
 </style>
 </head>
 <body ng-app="myapp">
+	<div ng-controller="UserController" ng-show="noshow"> /*remove ng-show to show this div*/
+		<h2 ng-repeat="u in Users">{{u}}</h2>
+	</div>
+	<br>
 	<div ng-controller="UserController">
 		<div ng-show="show"><img src="images/loading.gif"/></div>
 		<table>
@@ -22,28 +26,15 @@ table, th, td {
 			</tr>
 		</table>
 		<br>
-	
-	
-	<form action="" ng-click="form = true">
-			<input type="button" value="Create User">
-			<br>
-			<br>
-		</form>
-		<form ng-show="form">
-			First name:<br> <input type="text" name="firstname"
-				value="" ng-model="User.name"> <br> 
-			email:<br> <input type="text"
-				name="emailId" value="" ng-model="User.emailId"> 
-				<br>
-				<br> 
-			<input type="button" value="Submit" ng-click="addUser()">
-		</form>
-</div>
+		<div ng-show=noshow>
+		Showing {{Users.length}} Users
+		</div>
+	</div>
 	<script>
 		angular.module("myapp", []).controller('UserController', ['$scope','$http','$log', function($scope,$http,$log) {
 					$scope.show = true;
-					$scope.form = false;
-					$log.debug("getting user");
+					$scope.noshow = false;
+					$log.error("getting user");
 					var result = $http.get('http://localhost:8080/AngularDynWeb/rest/user');
 					result.success(function(data, status, headers, config) {
 						console.log(data);
@@ -54,15 +45,6 @@ table, th, td {
 						$scope.show = false;
 						$scope.error = status;
 					});
-					$scope.addUser = function() {
-					console.log($scope.User);
-					var formPost = $http.post('http://localhost:8080/AngularDynWeb/rest/user', $scope.User)
-				.success(function(data) {
-						console.log(data);
-						$scope.Users.push($scope.User);
-						$scope.form = false;
-					});
-					};
 				}]);
 	</script>
 </body>
