@@ -27,14 +27,13 @@
 			$scope.error = status;
 		});
 
-		$scope.addUser = function(user) {
-			$log.debug(user);
-			$http.post("rest/user", user, function(data) {
-				$log.debug(data);
-				$scope.users.push(user);
-				$scope.$digest();
-			});
-		}
+		$scope.addUser = function(){
+		$http.post("rest/user",$scope.user).success(function(data, status, headers, config){
+		$scope.users.push(angular.copy($scope.user));
+		$scope.showUserForm=false;	
+		});
+		};
+		
 		$scope.editUser = function(user) {
 			console.log(user);
 			$scope.user = user;

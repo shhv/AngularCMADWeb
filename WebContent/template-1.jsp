@@ -2,8 +2,8 @@
 		<div ng-show="loading"><img src="images/loading.gif"></img></div>
 		<table style="width: 400px">
 			<tr ng-repeat="user in users">
-				<td>{{user.name}}</td>
-				<td>{{user.age}}</td>
+				<td>{{user.userName}}</td>
+				<td>{{user.email}}</td>
 				<td><a href='#' ng-click="editUser(user)">Edit</a></td>
 			</tr>
 		</table>
@@ -12,8 +12,8 @@
 		<input type="button" value="Add User" ng-click="showAddForm=true"></input>
 		<div ng-show="showAddForm || showEditForm">
 			<form novalidate>
-				<input type="text" ng-model="user.name"></input>
-				<input type="number" ng-model="user.age"></input>
+				<input type="text" ng-model="user.userName"></input>
+				<input type="text" ng-model="user.email"></input>
 				<input type="button" value="Cancel" ng-click="showAddForm=false"></input>
 				<input type="button" value="Update" ng-show="showEditForm" ng-click="updateUser(user)"></input>
 				<input type="button" value="Save" ng-show="showAddForm" ng-click="addUser(user)"></input>

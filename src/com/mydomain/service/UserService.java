@@ -19,8 +19,11 @@ import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
+import org.mongodb.morphia.Datastore;
 
-import com.mydomain.model.User;
+import com.mydomain.infra.ServicesFactory;
+import com.mysocial.model.User;
+
 
 @Path("/user")
 public class UserService {
@@ -32,7 +35,7 @@ public class UserService {
 		Session ses = HibernateUtil.currentSession();
 		try {
 			User u = (User) ses.load(User.class, id);
-			User simpleUser = new User(u);
+			User simpleUser = new User();
 			return simpleUser;
 		} finally {
 			HibernateUtil.closeSession();
@@ -42,12 +45,11 @@ public class UserService {
 	@GET
 	@Produces({MediaType.APPLICATION_JSON})
 	public List<User> getUsers() {
-		Session ses = HibernateUtil.currentSession();
-		try {
-			return ses.createCriteria(User.class).list();
-		} finally {
-			HibernateUtil.closeSession();
-		}
+		System.out.println("Inside get");
+		Datastore dataStore = ServicesFactory.getMongoDB();
+		List<User> u = (dataStore.createQuery(User.class).asList());
+		System.out.println(u);
+		return u;
 	}
 	
 	@POST
@@ -61,14 +63,8 @@ public class UserService {
 //		Session ses = HibernateUtil.currentSession();
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void createUser(User u){
-		Session ses = HibernateUtil.currentSession();
-		try {
-			Transaction tx = ses.beginTransaction();
-			ses.save(u);
-			tx.commit();
-		}finally{
-			HibernateUtil.closeSession();
-		}
+		Datastore dataStore = ServicesFactory.getMongoDB();
+		dataStore.save(u);
 	}
 	
 	@PUT
